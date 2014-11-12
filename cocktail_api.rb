@@ -3,5 +3,5 @@ require 'json'
 
 get '/' do
   content_type :json  
-  { message: 'Hello World. Who needs a drink?' }.to_json
+  { message: 'Hello World' }.to_json
 end
