@@ -84,7 +84,11 @@ describe 'Cocktail API' do
 
 	describe "POST /drinks" do
 		let(:response) { 
-			data = { name: 'Gin and Juice', ingredients: [ { type: 'Gin', amount: 30 }, { type: 'Juice', amount: 100 } ] }
+			data = { 
+				name: 'Gin and Juice', 
+				description: 'Combine gin and tonic and enjoy.', 
+				ingredients: [ { type: 'Gin', amount: 30 }, { type: 'Juice', amount: 100 } ] 
+			}
 	  	post '/drinks', data.to_json, "CONTENT_TYPE" => "application/json" 
 	  	last_response
 	  }
@@ -100,6 +104,7 @@ describe 'Cocktail API' do
 
 	  it 'should return the details of the drink' do
 			expect(response_data['name']).to eq 'Gin and Juice'
+			expect(response_data['description']).to eq 'Combine gin and tonic and enjoy.'
 	  end
 
 		it 'should return the ingredients of the drink' do
@@ -117,14 +122,14 @@ describe 'Cocktail API' do
 	describe "GET /drink/:id" do
 	
 		before do
-			@drink = Drink.create(name: 'Gin and Juice')
+			@drink = Drink.create(name: 'Gin and Juice', description: 'Combine gin and tonic and enjoy.')
 			@drink.ingredients.create( type: 'Gin', amount: 30)
 			@drink.ingredients.create( type: 'Juice', amount: 100)
 		end
 
 		let(:response) { 
-	  	get "/drinks/#{@drink.id}"
-	  	last_response
+  		get "/drinks/#{@drink.id}"
+  		last_response
 	  }
 	  let(:response_data) { JSON.parse(response.body) }
 
@@ -134,13 +139,28 @@ describe 'Cocktail API' do
 
 		it 'should be a json response' do
 			expect(response.content_type).to eq 'application/json'
-	  end  
+  	end  
+
+  	describe "drink" do
+  		subject { response_data }
+  		it "should have a name" do
+  			expect(subject['name']).to eq 'Gin and Juice'
+  		end
+  		it "should have a description" do
+  			expect(subject['description']).to eq 'Combine gin and tonic and enjoy.'
+  		end
+  		it 'should have ingredients' do
+  			expect(subject['ingredients'].length).to be 2
+  			expect(subject['ingredients'].first).to eq( { 'type' => 'Gin', 'amount' => 30 } )
+				expect(subject['ingredients'].last).to eq( { 'type' => 'Juice', 'amount' => 100 } )
+  		end
+  	end
 
 	end
 
 	describe "DELETE /drink/:id" do
 	  before do
-	  	@drink = Drink.create(name: 'Gin and Juice')
+	  	@drink = Drink.create(name: 'Gin and Juice', description: 'Combine gin and tonic and enjoy.')
 			@drink.ingredients.create( type: 'Gin', amount: 30)
 			@drink.ingredients.create( type: 'Juice', amount: 100)
 	  end

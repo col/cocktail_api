@@ -6,8 +6,9 @@ require 'rack/parser'
 
 class Drink
   include DataMapper::Resource
-  property :id, 	Serial
-  property :name,   String
+  property :id, 	 Serial
+  property :name,  String
+  property :description,  String
 
   has n, :ingredients
 end
@@ -39,6 +40,7 @@ helpers do
   def drink_to_json(drink)
     {
       name: drink.name,
+      description: drink.description,
       ingredients: drink.ingredients.map { |i| { type: i.type, amount: i.amount } },
       _links: {
         'self' => base_url + '/drinks/' + drink.id.to_s
@@ -48,8 +50,11 @@ helpers do
 
 end
 
-get '/' do  
+before do
   content_type :json
+end
+
+get '/' do  
   { 
     message: 'Hello World. Would you like a cocktail?',
     _links: {
@@ -60,8 +65,6 @@ get '/' do
 end
 
 get '/drinks' do
-  content_type :json  
-
   { 
     _embedded: { drinks: Drink.all.map { |drink| drink_to_json(drink) } }, 
     _links: { 'self' => base_url + '/drinks' } 
@@ -69,13 +72,11 @@ get '/drinks' do
 end
 
 get '/drinks/:id' do
-  content_type :json
   drink = Drink.get(params[:id])
   drink_to_json(drink).to_json
 end
 
 delete '/drinks/:id' do
-  content_type :json  
   drink = Drink.get(params[:id])
   drink.ingredients.destroy!
   if drink.destroy
@@ -86,9 +87,7 @@ delete '/drinks/:id' do
 end 
 
 post '/drinks' do
-  content_type :json
-  
-  drink = Drink.create( name: params[:name] )
+  drink = Drink.create( name: params[:name], description: params[:description] )
   (params[:ingredients] || []).each do |ingredient| 
     drink.ingredients.create(ingredient) 
   end  
