@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/cross_origin'
 require 'json'
 require 'data_mapper'
 require 'rack/parser'
@@ -23,6 +24,7 @@ end
 configure do  
   DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/development.sqlite3"))
   DataMapper.auto_upgrade!
+  enable :cross_origin
 end
 
 use Rack::Parser, :content_types => {

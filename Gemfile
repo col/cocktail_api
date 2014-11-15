@@ -4,6 +4,7 @@ gem 'sinatra'
 gem 'json'
 gem 'data_mapper'
 gem 'rack-parser'
+gem 'sinatra-cross_origin'
 
 group :development do
  gem 'sqlite3'
