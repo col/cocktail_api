@@ -45,7 +45,7 @@ helpers do
       _links: {
         'self' => base_url + '/drinks/' + drink.id.to_s
       }
-    }.to_json
+    }
   end
 
 end
@@ -65,7 +65,7 @@ get '/drinks' do
   content_type :json  
 
   { 
-    _embedded: { drinks: Drink.all }, 
+    _embedded: { drinks: Drink.all.map { |drink| drink_to_json(drink) } }, 
     _links: { 'self' => base_url + '/drinks' } 
   }.to_json
 end
@@ -73,7 +73,7 @@ end
 get '/drinks/:id' do
   content_type :json
   drink = Drink.get(params[:id])
-  drink_to_json(drink)
+  drink_to_json(drink).to_json
 end
 
 post '/drinks' do
@@ -84,5 +84,5 @@ post '/drinks' do
     drink.ingredients.create(ingredient) 
   end  
   
-  drink_to_json(drink)
+  drink_to_json(drink).to_json
 end

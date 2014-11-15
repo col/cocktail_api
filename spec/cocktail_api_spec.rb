@@ -56,7 +56,7 @@ describe 'Cocktail API' do
 	  end
 
 	  context 'when there are no drinks' do
-	  	it 'should return an emtty list of drinks' do
+	  	it 'should return an empty list of drinks' do
 	  		expect(response_data['_embedded']['drinks']).to eq []
 	  	end
 	  end
@@ -64,11 +64,20 @@ describe 'Cocktail API' do
 	  context 'when a drinks exists' do
 	  	before do
 	  		Drink.create(name: 'Bloody Mary')
+	  		Drink.create(name: 'Gin and Tonic')
 	  	end
 
-	  	it 'should return an empty list of drinks' do
-	  		expect(response_data['_embedded']['drinks'].length).to eq 1
+	  	it 'should return a list of drinks' do
+	  		expect(response_data['_embedded']['drinks'].length).to eq 2
 	  	end
+
+	  	describe 'drink' do
+	  		let(:drink) { response_data['_embedded']['drinks'].first }
+
+		  	it 'should include a self link' do		  		
+		  		expect(drink['_links']['self']).to eq 'http://example.org/drinks/1'
+		  	end
+		  end
 	  end
 
 	end
