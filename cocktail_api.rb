@@ -21,6 +21,10 @@ class Ingredient
   belongs_to :drink
 end
 
+set :allow_origin, :any
+set :allow_methods, [:get, :post, :options, :delete]
+set :protection, false
+
 configure do  
   DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/development.sqlite3"))
   DataMapper.auto_upgrade!
@@ -57,6 +61,10 @@ get '/' do
       'drinks' => base_url + '/drinks'
     }
   }.to_json
+end
+
+options '/*' do
+    200
 end
 
 get '/drinks' do
