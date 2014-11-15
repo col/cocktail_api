@@ -103,9 +103,9 @@ describe 'Cocktail API' do
 	  end
 
 		it 'should return the ingredients of the drink' do
-			expect(response_data['_embedded']['ingredients'].length).to eq 2
-			expect(response_data['_embedded']['ingredients'].first).to eq( { 'type' => 'Gin', 'amount' => 30 } )
-			expect(response_data['_embedded']['ingredients'].last).to eq( { 'type' => 'Juice', 'amount' => 100 } )
+			expect(response_data['ingredients'].length).to eq 2
+			expect(response_data['ingredients'].first).to eq( { 'type' => 'Gin', 'amount' => 30 } )
+			expect(response_data['ingredients'].last).to eq( { 'type' => 'Juice', 'amount' => 100 } )
 	  end
 
 	  it 'should have a self link' do

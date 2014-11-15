@@ -39,9 +39,7 @@ helpers do
   def drink_to_json(drink)
     {
       name: drink.name,
-      _embedded: {
-        ingredients: drink.ingredients.map { |i| { type: i.type, amount: i.amount } }
-      },
+      ingredients: drink.ingredients.map { |i| { type: i.type, amount: i.amount } },
       _links: {
         'self' => base_url + '/drinks/' + drink.id.to_s
       }
