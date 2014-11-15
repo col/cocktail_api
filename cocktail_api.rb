@@ -74,6 +74,17 @@ get '/drinks/:id' do
   drink_to_json(drink).to_json
 end
 
+delete '/drinks/:id' do
+  content_type :json  
+  drink = Drink.get(params[:id])
+  drink.ingredients.destroy!
+  if drink.destroy
+    { message: 'Drink deleted!' }.to_json
+  else
+    { message: 'Failed!' }.to_json
+  end
+end 
+
 post '/drinks' do
   content_type :json
   

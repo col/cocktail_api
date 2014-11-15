@@ -121,6 +121,7 @@ describe 'Cocktail API' do
 			@drink.ingredients.create( type: 'Gin', amount: 30)
 			@drink.ingredients.create( type: 'Juice', amount: 100)
 		end
+
 		let(:response) { 
 	  	get "/drinks/#{@drink.id}"
 	  	last_response
@@ -135,5 +136,36 @@ describe 'Cocktail API' do
 			expect(response.content_type).to eq 'application/json'
 	  end  
 
+	end
+
+	describe "DELETE /drink/:id" do
+	  before do
+	  	@drink = Drink.create(name: 'Gin and Juice')
+			@drink.ingredients.create( type: 'Gin', amount: 30)
+			@drink.ingredients.create( type: 'Juice', amount: 100)
+	  end
+
+		let(:response) { 		
+	  	delete "/drinks/#{@drink.id}"
+	  	last_response
+	  }
+
+	  it "should be successful" do
+			expect(response).to be_ok	
+		end
+
+		it 'should be a json response' do
+			expect(response.content_type).to eq 'application/json'
+	  end
+
+	  it 'should delete the drink' do
+	  	response
+			expect(Drink.all.length).to eq 0
+	  end
+
+	  it 'should delete the ingredients' do
+	  	response
+			expect(Ingredient.all.length).to eq 0
+	  end
 	end
 end
