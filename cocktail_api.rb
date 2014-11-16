@@ -80,7 +80,8 @@ get '/' do
     message: 'Hello World. Would you like a cocktail?',
     _links: {
       'self' => base_url,
-      'drinks' => base_url + '/drinks'
+      'drinks' => base_url + '/drinks',
+      'bottles' => base_url + '/bottles'
     }
   }.to_json
 end

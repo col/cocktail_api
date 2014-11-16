@@ -34,6 +34,10 @@ describe 'Cocktail API' do
 		it 'should have a drinks link' do
 			expect(response_data['_links']['drinks']).to eq 'http://example.org/drinks'
 		end
+
+		it 'should have a bottles link' do
+			expect(response_data['_links']['bottles']).to eq 'http://example.org/bottles'
+		end
 	end
 
 	describe "GET /drinks" do
