@@ -31,7 +31,7 @@ class Bottle
 end
 
 set :allow_origin, :any
-set :allow_methods, [:get, :post, :options, :delete]
+set :allow_methods, [:get, :post, :options, :delete, :put, :patch]
 set :protection, false
 
 configure do  
