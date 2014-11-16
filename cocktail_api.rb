@@ -27,6 +27,7 @@ class Bottle
   property :id,     Serial
   property :type,   String
   property :amount, Integer
+  property :pin,    Integer
 end
 
 set :allow_origin, :any
@@ -63,6 +64,7 @@ helpers do
     {
       type: bottle.type,
       amount: bottle.amount,
+      pin: bottle.pin,
       _links: {
         'self' => base_url + '/bottles/' + bottle.id.to_s
       }
@@ -143,6 +145,6 @@ delete '/bottles/:id' do
 end 
 
 post '/bottles' do
-  bottle = Bottle.create( type: params[:type], amount: params[:amount] )  
+  bottle = Bottle.create( type: params[:type], amount: params[:amount], pin: params[:pin] )  
   bottle_to_json(bottle).to_json
 end

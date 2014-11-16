@@ -35,8 +35,8 @@ describe 'Bottles' do
 	  
 	  context 'when a drinks exists' do
 	  	before do
-	  		Bottle.create(type: 'Vodka', amount: 700)
-	  		Bottle.create(type: 'Gin', amount: 700)
+	  		Bottle.create(type: 'Vodka', amount: 700, pin: 1)
+	  		Bottle.create(type: 'Gin', amount: 700, pin: 2)
 	  	end
 
 	  	it 'should return a list of bottles' do
@@ -60,7 +60,7 @@ describe 'Bottles' do
 
 	describe "POST /bottles" do
 		let(:response) { 
-			data = { type: 'Gin', amount: 700 }
+			data = { type: 'Gin', amount: 700, pin: 1 }
 	  	post '/bottles', data.to_json, "CONTENT_TYPE" => "application/json" 
 	  	last_response
 	  }
@@ -82,6 +82,10 @@ describe 'Bottles' do
 			expect(response_data['amount']).to eq 700
 	  end		
 
+		it 'should return the pin the bottle is attached to' do
+			expect(response_data['pin']).to eq 1
+	  end		
+
 	  it 'should have a self link' do
 			expect(response_data['_links']['self']).to eq 'http://example.org/bottles/1'
 	  end
@@ -91,7 +95,7 @@ describe 'Bottles' do
 	describe "GET /bottle/:id" do
 	
 		before do
-			@bottle = Bottle.create(type: 'Gin', amount: 700)
+			@bottle = Bottle.create(type: 'Gin', amount: 700, pin: 1 )
 		end
 
 		let(:response) { 
@@ -115,6 +119,9 @@ describe 'Bottles' do
   		end
   		it "should have an amount" do
   			expect(subject['amount']).to eq 700
+  		end
+  		it "should have a pin" do
+  			expect(subject['pin']).to eq 1
   		end
   	end
 
