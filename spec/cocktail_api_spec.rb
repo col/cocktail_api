@@ -74,6 +74,9 @@ describe 'Cocktail API' do
 	  	describe 'drink' do
 	  		let(:drink) { response_data['_embedded']['drinks'].first }
 
+				it 'should include the drinks name' do		  		
+		  		expect(drink['name']).to eq 'Bloody Mary'
+		  	end
 		  	it 'should include a self link' do		  		
 		  		expect(drink['_links']['self']).to eq 'http://example.org/drinks/1'
 		  	end
