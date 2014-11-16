@@ -123,6 +123,16 @@ post '/drinks' do
   drink_to_json(drink).to_json
 end
 
+patch '/drinks/:id' do
+  drink = Drink.get(params[:id])
+  values = params.select { |key,_| ['name', 'description'].include? key }
+  if drink.update(values)
+    drink_to_json(drink).to_json
+  else
+    { message: 'Failed!' }
+  end
+end
+
 get '/bottles' do
   { 
     _embedded: { bottles: Bottle.all.map { |drink| bottle_to_json(drink) } }, 
@@ -147,4 +157,14 @@ end
 post '/bottles' do
   bottle = Bottle.create( type: params[:type], amount: params[:amount], pin: params[:pin] )  
   bottle_to_json(bottle).to_json
+end
+
+patch '/bottles/:id' do
+  bottle = Bottle.get(params[:id])
+  values = params.select { |key,_| ['type', 'amount', 'pin'].include? key }
+  if bottle.update(values)
+    bottle_to_json(bottle).to_json
+  else
+    { message: 'Failed!' }
+  end
 end

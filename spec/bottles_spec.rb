@@ -127,6 +127,41 @@ describe 'Bottles' do
 
 	end
 
+	describe "PATCH /bottles/:id" do
+		before do
+			@bottle = Bottle.create(type: 'Vodka', amount: 700)
+		end
+		let(:response) { 
+			data = { 
+				amount: 670
+			}
+	  	patch "/bottles/#{@bottle.id}", data.to_json, "CONTENT_TYPE" => "application/json" 
+	  	last_response
+	  }
+	  let(:response_data) { JSON.parse(response.body) }
+
+		it "should be successful" do
+			expect(response).to be_ok	
+		end
+
+		it 'should be a json response' do
+			expect(response.content_type).to eq 'application/json'
+	  end
+
+		it 'should update the drink' do
+			response
+			expect(Bottle.first.amount).to eq 670
+	  end
+
+	  it 'should return the details of the drink' do
+			expect(response_data['type']).to eq 'Vodka'
+	  end
+
+	  it 'should have a self link' do
+			expect(response_data['_links']['self']).to eq 'http://example.org/bottles/1'
+	  end	
+	end
+
 	describe "DELETE /bottle/:id" do
 	  before do
 	  	@bottle = Bottle.create(type: 'Gin', amount: 700)

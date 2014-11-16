@@ -125,6 +125,41 @@ describe 'Cocktail API' do
 	  end
 
 	end
+
+	describe "PATCH /drink/:id" do
+		before do
+			@drink = Drink.create(name: 'Bloody Mary')
+		end
+		let(:response) { 
+			data = { 
+				name: 'Bloody Mary 2', 
+			}
+	  	patch "/drinks/#{@drink.id}", data.to_json, "CONTENT_TYPE" => "application/json" 
+	  	last_response
+	  }
+	  let(:response_data) { JSON.parse(response.body) }
+
+		it "should be successful" do
+			expect(response).to be_ok	
+		end
+
+		it 'should be a json response' do
+			expect(response.content_type).to eq 'application/json'
+	  end
+
+		it 'should update the drink' do
+			response
+			expect(Drink.first.name).to eq 'Bloody Mary 2'
+	  end
+
+	  it 'should return the details of the drink' do
+			expect(response_data['name']).to eq 'Bloody Mary 2'
+	  end
+
+	  it 'should have a self link' do
+			expect(response_data['_links']['self']).to eq 'http://example.org/drinks/1'
+	  end	
+	end
 	
 	describe "GET /drink/:id" do
 	
