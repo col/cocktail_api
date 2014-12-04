@@ -127,6 +127,12 @@ patch '/drinks/:id' do
   drink = Drink.get(params[:id])
   values = params.select { |key,_| ['name', 'description'].include? key }
   if drink.update(values)
+    if params[:ingredients]
+      drink.ingredients.destroy
+      params[:ingredients].each do |ingredient| 
+        drink.ingredients.create(ingredient) 
+      end 
+    end
     drink_to_json(drink).to_json
   else
     { message: 'Failed!' }
